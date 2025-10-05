@@ -1,0 +1,124 @@
+--// Create the GUI toggle button
+local G2L = {}
+
+-- Create ScreenGui
+G2L["1"] = Instance.new("ScreenGui")
+G2L["1"].Name = "Library"
+G2L["1"].ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+G2L["1"].ResetOnSpawn = false
+G2L["1"].Parent = gethui() or game:GetService("CoreGui")
+
+-- Create ImageButton (Toggle)
+G2L["1e"] = Instance.new("ImageButton", G2L["1"])
+G2L["1e"].Name = "Toggle"
+G2L["1e"].BorderSizePixel = 0
+G2L["1e"].BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+G2L["1e"].Image = "rbxassetid://97186448195567" -- your icon image
+G2L["1e"].Size = UDim2.new(0, 45, 0, 45)
+G2L["1e"].BorderColor3 = Color3.fromRGB(0, 0, 0)
+G2L["1e"].Position = UDim2.new(0, 22, 0, 76)
+G2L["1e"].Visible = true
+G2L["1e"].Draggable = true
+
+-- Add border (UIStroke)
+G2L["1d"] = Instance.new("UIStroke", G2L["1e"])
+G2L["1d"].Thickness = 2
+G2L["1d"].ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+G2L["1d"].Color = Color3.fromRGB(0, 0, 0)
+
+-- Add corner radius
+G2L["1f"] = Instance.new("UICorner", G2L["1e"])
+G2L["1f"].CornerRadius = UDim.new(0, 5)
+
+-- Load your Library
+loadstring(game:HttpGet("https://raw.githubusercontent.com/mamafoni281/TestLib/refs/heads/main/Atlas%20Library"))()
+
+-- Connect the toggle button to toggle the UI
+G2L["1e"].MouseButton1Down:Connect(function()
+	if Library.ToggleUI then
+		Library:ToggleUI()
+	elseif Library.SetOpen then
+		Library:SetOpen(not Library.Open)
+	else
+		warn("Library:ToggleUI() not found; using fallback.")
+	end
+end)
+
+-- Create a new Window
+local win = Library:Window({
+    Name = "Atlas Library",
+    Rank = "V1.0"
+})
+
+-- Create a Tab
+local mainTab = Library:Tab({
+    Title = "Main Tab"
+})
+
+-- Create a Section inside the Tab
+local mainSection = mainTab:Section({
+    Name = "Main Controls"
+})
+
+-- Add a Button
+mainSection:Button({
+    Name = "Click Me!",
+    Callback = function()
+        print("Button clicked!")
+        Library:ChangeAccent(Color3.fromRGB(math.random(0,255), math.random(0,255), math.random(0,255)))
+    end
+})
+
+-- Add a Toggle
+mainSection:Toggle({
+    Name = "Enable Feature",
+    State = false,
+    Callback = function(state)
+        print("Toggle state:", state)
+    end
+})
+
+-- Add a Paragraph (TextLabel)
+mainSection:Paragraph({
+    Name = "Description",
+    Text = "This is an example paragraph using the Library UI.\nYou can add more text here to explain your feature."
+})
+
+mainSection:Textbox({
+    Name = "Enter Message",
+    Placeholder = "Type something...",
+    Default = "",
+    Flag = "UserMessage",
+    Callback = function(value)
+        print("User entered text:", value)
+    end
+})
+
+mainSection:Dropdown({
+    Name = "Select Option",
+    Options = { "One", "Two", "Three", "Four" },
+    Default = "Red",
+    Callback = function(value)
+        print("Dropdown selected:", value)
+        if value == "One" then
+            Library:ChangeAccent(Color3.fromRGB(255, 80, 80))
+        elseif value == "Two" then
+            Library:ChangeAccent(Color3.fromRGB(80, 255, 120))
+        elseif value == "three" then
+            Library:ChangeAccent(Color3.fromRGB(80, 120, 255))
+        elseif value == "Four" then
+            Library:ChangeAccent(Color3.fromRGB(255, 230, 80))
+        end
+    end
+})
+
+mainSection:Slider({
+    Name = "Slider",
+    Min = 0,
+    Max = 100,
+    Default = 50,
+    Flag = "VolumeSlider",
+    Callback = function(value)
+        print("Slider value:", value)
+    end
+})
